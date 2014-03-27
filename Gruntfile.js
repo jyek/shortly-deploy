@@ -127,6 +127,8 @@ module.exports = function(grunt) {
       grunt.task.run([
         // maybe same or something else
         // server-prod
+        'jshint:files',
+        'server-dev'
       ]);
     } else {
       grunt.task.run([
