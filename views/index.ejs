@@ -41,8 +41,8 @@
   });
 </script>
 
-<%if (environment === "development") {%>
-  <%- partial('development_scripts.ejs') %>
-<%} else {%>
+<%if (process.env.PROD) {%>
   <%- partial('production_scripts.ejs') %>
+<%} else {%>
+  <%- partial('development_scripts.ejs') %>
 <%} %>

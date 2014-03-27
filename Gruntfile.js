@@ -54,6 +54,11 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      combine: {
+        files: {
+          'public/style.min.css': ['public/*.css']
+        }
+      }
     },
 
     watch: {
@@ -75,6 +80,11 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        options: {
+            stdin: true,
+            stdout: true
+        },
+        command: 'git push azure master'
       }
     },
   });
@@ -110,12 +120,12 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'concat', 'uglify'
+    'concat', 'uglify', 'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run(['shell:prodServer']);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -123,15 +133,14 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', function () {
     if(grunt.option('prod')) {
-      // add your production server task here
       grunt.task.run([
-        // maybe same or something else
-        // server-prod
+        'test',
         'jshint:files',
-        'server-dev'
+        'shell:prodServer'
       ]);
     } else {
       grunt.task.run([
+        'test',
         'jshint:files',
         'server-dev'
       ]);
